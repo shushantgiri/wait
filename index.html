@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Login Form with Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+        }
+
+        video {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        .login-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 4px;
+            background-color: #fc5a8d;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background-color: #e52b50;
+        }
+
+        .success-message {
+            font-size: 1.5em;
+            color: #2a2a2a;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .login-form {
+                padding: 15px;
+            }
+
+            .submit-btn {
+                font-size: 1.1em;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video Elements -->
+    <video id="videoA" src="video/video a.mp4" autoplay muted playsinline loop></video>
+    <video id="videoC" src="video/wait.mp4" autoplay muted playsinline></video>
+    <video id="videoB" src="video/video b.mp4" autoplay muted playsinline loop></video>
+
+    <!-- Login Form -->
+    <form class="login-form" id="loginForm">
+        <div class="form-group">
+            <input type="text" id="username" name="username" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" name="password" placeholder="Password">
+        </div>
+        <button type="submit" class="submit-btn" id="loginButton">Login</button>
+    </form>
+
+    <p class="success-message" id="successMessage" style="display: none;">You have successfully logged in!</p>
+
+    <script>
+        const videoA = document.getElementById('videoA');
+        const videoC = document.getElementById('videoC');
+        const videoB = document.getElementById('videoB');
+
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginForm = document.getElementById('loginForm');
+        const successMessage = document.getElementById('successMessage');
+
+        let typingTimeout;
+
+        function playVideo(video) {
+            hideAllVideos();
+            video.style.display = 'block';
+            video.play();
+        }
+
+        function hideAllVideos() {
+            [videoA, videoC, videoB].forEach(video => {
+                video.style.display = 'none';
+                video.pause();
+            });
+        }
+
+        function handleTyping() {
+            clearTimeout(typingTimeout);
+
+            playVideo(videoA); // Play Video A instantly while typing
+
+            typingTimeout = setTimeout(() => {
+                playVideo(videoC); // Show Video C when typing stops
+            }, 500); // 500ms after typing stops
+        }
+
+        usernameInput.addEventListener('input', handleTyping);
+        passwordInput.addEventListener('input', handleTyping);
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault(); 
+            playVideo(videoB); // Show Video B on login button click
+            loginForm.style.display = 'none'; 
+            successMessage.style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
